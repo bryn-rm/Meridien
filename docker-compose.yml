@@ -1,0 +1,39 @@
+version: '3.9'
+services:
+  calendar-agent:
+    build: ./services/calendar-agent
+    ports: ["8001:8000"]
+  finance-agent:
+    build: ./services/finance-agent
+    ports: ["8002:8000"]
+  health-agent:
+    build: ./services/health-agent
+    ports: ["8003:8000"]
+  goals-agent:
+    build: ./services/goals-agent
+    ports: ["8004:8000"]
+  comms-agent:
+    build: ./services/comms-agent
+    ports: ["8005:8000"]
+  orchestrator-agent:
+    build: ./services/orchestrator-agent
+    environment:
+      CALENDAR_AGENT_URL: http://calendar-agent:8000
+      FINANCE_AGENT_URL: http://finance-agent:8000
+      HEALTH_AGENT_URL: http://health-agent:8000
+      GOALS_AGENT_URL: http://goals-agent:8000
+      COMMS_AGENT_URL: http://comms-agent:8000
+    depends_on:
+      - calendar-agent
+      - finance-agent
+      - health-agent
+      - goals-agent
+      - comms-agent
+    ports: ["8000:8000"]
+  frontend:
+    image: nginx:alpine
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    ports: ["3000:80"]
+    depends_on:
+      - orchestrator-agent
