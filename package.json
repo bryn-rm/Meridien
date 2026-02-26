@@ -1,0 +1,9 @@
+{
+  "name": "meridian",
+  "private": true,
+  "workspaces": [
+    "packages/types",
+    "packages/mcp-servers/calendar",
+    "services/voice-gateway"
+  ]
+}
